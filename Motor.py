@@ -102,7 +102,7 @@ class Motor:
     def motorMove(self, steps, break_function, delay=2000):
         self.isRunning = True
         print("Wykonuje: " + str(steps)+" steps")
-        for i in range(0, steps):
+        for i in range(0, int(steps)):
             #print(".")
             if not break_function():
                 self.stepPin.write(1)
