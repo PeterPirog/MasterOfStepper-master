@@ -11,6 +11,8 @@ class Motor:
         self.stepsPerRevolution = steps_per_rev
         self.minDelay = min_delay
         self.isRunning: bool = False
+        self.encoder_position=0
+        self.direction=0 # +1 for right, -1 for left
 
         try:
             self.board = pyfirmata2.Arduino(port, baudrate=115200)
@@ -69,6 +71,7 @@ class Motor:
             print("SILNIK NIE ZAKONCZYL POPRZEDNIEJ KOMENDY! Nie wykonano: moveRightSteps " + str(steps))
         else:
             self.dirPin.write(1)
+            self.direction=1
             self.motorMove(steps, self.is_high_alert, delay)
 
     def moveLeftSteps(self, steps, delay):
@@ -78,6 +81,7 @@ class Motor:
             print("SILNIK NIE ZAKONCZYL POPRZEDNIEJ KOMENDY! Nie wykonano: moveLeftSteps " + str(steps))
         else:
             self.dirPin.write(0)
+            self.direction=-1
             self.motorMove(steps, self.is_low_alert, delay)
 
     def moveRightRev(self, revolutions, delay):
@@ -87,6 +91,7 @@ class Motor:
             print("SILNIK NIE ZAKONCZYL POPRZEDNIEJ KOMENDY! Nie wykonano: moveRightRev " + str(revolutions))
         else:
             self.dirPin.write(1)
+            self.direction = 1
             self.motorMove(revolutions * self.stepsPerRevolution, self.is_high_alert, delay)
 
     def moveLeftRev(self, revolutions, delay):
@@ -96,6 +101,7 @@ class Motor:
             print("SILNIK NIE ZAKONCZYL POPRZEDNIEJ KOMENDY! Nie wykonano: moveLeftRev " + str(revolutions))
         else:
             self.dirPin.write(0)
+            self.direction = -1
             self.motorMove(revolutions * self.stepsPerRevolution, self.is_low_alert, delay)
 
     @multitasking.task
@@ -103,12 +109,13 @@ class Motor:
         self.isRunning = True
         print("Wykonuje: " + str(steps)+" steps")
         for i in range(0, int(steps)):
+            self.encoder_position+=self.direction
             #print(".")
             if not break_function():
                 self.stepPin.write(1)
                 for j in range(0, delay):
                     pass
-                # time.sleep(1 / 1000000)
+                    #time.sleep(1 / 1000000)
 
                 self.stepPin.write(0)
                 for j in range(0, delay):
