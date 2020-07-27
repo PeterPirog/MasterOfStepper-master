@@ -8,7 +8,7 @@ import time
 motor1 = Motor.Motor('COM8', 800, 10, 11, 2, 3)
 
 # Test asynchronicznej funkcji obrotu silnikiem
-motor1.moveLeftRev(2.3, 2000)
+#motor1.moveLeftRev(2.3, 2000)
 
 # Jakieś zadanie z równoczesnym monitorowaniem zmiennej isRuninng obiektu motor
 for i in range(0, 50):
@@ -17,14 +17,15 @@ for i in range(0, 50):
 
 # Dostepne metody:
 # moveLeftRev(ilosc obrotów, opoznienie pomiedzy krokami)
-motor1.moveLeftRev(10, 2000)
+motor1.moveLeftRev(100, 2000)
 time.sleep(0.5)
-motor1.moveRightRev(9, 2000)
-motor1.moveLeftSteps(800, 2000)
+#motor1.moveRightRev(10, 2000)
+#motor1.moveLeftSteps(800, 2000)
+
 
 time.sleep(5)
 # Jeśli silnik nie pracuje, zakreś w prawo o 842 kroki, opóznienie 5000. Im większe opźnienie, tym wolniej się kręci
-if not motor1.isRunning: motor1.moveRightSteps(842, 5000)
+#if not motor1.isRunning: motor1.moveRightSteps(842, 5000)
 
 
 print(motor1.encoder_position)
